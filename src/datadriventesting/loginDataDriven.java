@@ -62,22 +62,23 @@ public class loginDataDriven {
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
 				int columnIndex = cell.getColumnIndex();
+				//System.out.println("columnIndex" +columnIndex);
 				switch (columnIndex) {
 				case 0:
-					driver.findElement(landingpageobj.loginemailinput).sendKeys(Keys.chord(Keys.CONTROL, "a"),
+					driver.findElement(landingpageobj.getLoginemailinput()).sendKeys(Keys.chord(Keys.CONTROL, "a"),
 							cell.getStringCellValue());
 					break;
 				case 1:
-					driver.findElement(landingpageobj.loginpasswordinput).sendKeys(Keys.chord(Keys.CONTROL, "a"),
+					driver.findElement(landingpageobj.getLoginpasswordinput()).sendKeys(Keys.chord(Keys.CONTROL, "a"),
 							cell.getStringCellValue());
 					break;
 				}
 			}
-			driver.findElement(landingpageobj.loginbtn).click();
+			driver.findElement(landingpageobj.getLoginbtn()).click();
 			if (driver.findElements(landingpageobj.accepterror).size() > 0) {
 				errormsg = landingpageobj.getErrorMessage();
 				driver.findElement(landingpageobj.accepterror).click();
-				System.out.println("Clicked error OK");
+//				System.out.println("Clicked error OK");
 			}
 			System.out.print(" - ");
 
@@ -85,6 +86,8 @@ public class loginDataDriven {
 				Boolean loginsuccess = driver.getPageSource().contains("Welcome,");
 				Assert.assertTrue(loginsuccess);
 				System.out.println("Login successsful");
+				break;
+//				landingpageobj.clicklogouturl();
 			}	
 			 else {
 				System.out.println("Login Error: "+errormsg);

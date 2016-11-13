@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,6 +18,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -29,9 +31,9 @@ public class LandingPage {
 	FileInputStream inputStream;
 	By loginURL = By.className("ph-link-gold");
 	String registrationURL = "https://www.pizzahut.com/#/registration";
-	By loginemailinput = By.id("email_signIn");
-	By loginpasswordinput = By.id("password_signIn");
-	By loginbtn = By.cssSelector("button[class='center-block btn btn-primary sign-in']");
+	private By loginemailinput = By.id("email_signIn");
+	private By loginpasswordinput = By.id("password_signIn");
+	private By loginbtn = By.cssSelector("button[class='center-block btn btn-primary sign-in']");
 	By loginsuccess = By
 			.cssSelector("span[class='hidden-xs ph-nav-link inline-top header-margin-right header_welcome']");
 	// Elements for signup page
@@ -49,7 +51,14 @@ public class LandingPage {
 	By createUserbtn = By.cssSelector("button[class='btn btn-primary']");
 	By accepterror = By.cssSelector("a[class='btn btn-primary btn-block ng-binding']");
 	By errormessage = By.cssSelector("p[class='text-center ng-binding']");
+	By logoutbtn = By.cssSelector("a[class='hidden-xs ph-nav-link inline-top header-margin-right ng-scope']");
+	
+	By images = By.tagName("img");
+	By hyperlinks = By.tagName("a");
+	By pageheader = By.cssSelector("h1[class='ph-jumbo ph-margin-left ng-binding']");
 
+	
+	
 	public Sheet loadExcelSheet(String sheetname) throws IOException {
 		String excelFilePath = "C://Users//Sagar//Desktop//TestData.xlsx";
 		inputStream = new FileInputStream(new File(excelFilePath));
@@ -74,6 +83,11 @@ public class LandingPage {
 	public void clickloginurl() {
 		driver.findElement(loginURL).click();
 	}
+	
+	public void clicklogouturl(){
+		driver.findElement(logoutbtn).click();
+		System.out.println("Logged out!");
+	}
 
 	public void clickRegistrationurl() {
 		driver.get(registrationURL);
@@ -85,5 +99,41 @@ public class LandingPage {
 
 	public void close(WebDriver driver) {
 		driver.close();
+	}
+
+	public By getLoginpasswordinput() {
+		return loginpasswordinput;
+	}
+
+	public void setLoginpasswordinput(By loginpasswordinput) {
+		this.loginpasswordinput = loginpasswordinput;
+	}
+
+	public By getLoginemailinput() {
+		return loginemailinput;
+	}
+
+	public void setLoginemailinput(By loginemailinput) {
+		this.loginemailinput = loginemailinput;
+	}
+
+	public By getLoginbtn() {
+		return loginbtn;
+	}
+
+	public void setLoginbtn(By loginbtn) {
+		this.loginbtn = loginbtn;
+	}
+
+	public List<WebElement> getImagesList() {
+		return driver.findElements(images);
+	}
+	
+	public List<WebElement> getHyperlinkList(){
+		return driver.findElements(hyperlinks);	
+	}
+	
+	public String getPageHeader(){
+		return driver.findElement(pageheader).getText().toLowerCase();
 	}
 }

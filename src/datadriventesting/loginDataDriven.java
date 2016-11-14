@@ -44,7 +44,7 @@ public class loginDataDriven {
 		// super.setUp();
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		driver.get("https://www.pizzahut.com/");
+		driver.get("https://www.pizzahut.com/"); //opens the PizzaHut landing page
 	}
 
 	@SuppressWarnings("deprecation")
@@ -52,18 +52,17 @@ public class loginDataDriven {
 	public void loginUsersTest() throws IOException {
 		String errormsg = null ;
 		landingpageobj = new LandingPage(driver);
-		landingpageobj.clickloginurl();
+		landingpageobj.clickloginurl(); // clicks the "sign-in" button
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-		Sheet loginSheet = landingpageobj.loadExcelSheet("loginData");
-		Iterator<Row> iterator = loginSheet.iterator();
+		Sheet loginSheet = landingpageobj.loadExcelSheet("loginData"); //opens the sheet with specified name
+		Iterator<Row> iterator = loginSheet.iterator(); //iterates over the row-column pairs
 		while (iterator.hasNext()) {
 			Row nextRow = iterator.next();
 			Iterator<Cell> cellIterator = nextRow.cellIterator();
 			while (cellIterator.hasNext()) {
 				Cell cell = cellIterator.next();
 				int columnIndex = cell.getColumnIndex();
-				//System.out.println("columnIndex" +columnIndex);
-				switch (columnIndex) {
+				switch (columnIndex) {  //use of conditional looping to access email-id and password
 				case 0:
 					driver.findElement(landingpageobj.getLoginemailinput()).sendKeys(Keys.chord(Keys.CONTROL, "a"),
 							cell.getStringCellValue());
@@ -74,27 +73,31 @@ public class loginDataDriven {
 					break;
 				}
 			}
+			
+			//clicks the login button
 			driver.findElement(landingpageobj.getLoginbtn()).click();
+			
+			//clicks the error button message incase the error is generated.
 			if (driver.findElements(landingpageobj.accepterror).size() > 0) {
 				errormsg = landingpageobj.getErrorMessage();
 				driver.findElement(landingpageobj.accepterror).click();
-//				System.out.println("Clicked error OK");
 			}
-			System.out.print(" - ");
+			System.out.print(" - "); //seprator
 
+			//Checks if login was successful
 			if (driver.findElements(landingpageobj.loginsuccess).size() > 0) {
 				Boolean loginsuccess = driver.getPageSource().contains("Welcome,");
 				Assert.assertTrue(loginsuccess);
 				System.out.println("Login successsful");
 				break;
-//				landingpageobj.clicklogouturl();
 			}	
-			 else {
+			 else { //displays the respective error message.
 				System.out.println("Login Error: "+errormsg);
 			}
 		}
 		System.out.println();
-
+		
+		//closes the workbook file
 		landingpageobj.closeWorkBook();
 		landingpageobj.closeFile();
 	}

@@ -52,9 +52,10 @@ public class registrationDataDriven {
 		landingpageobj = new LandingPage(driver);
 		landingpageobj.clickRegistrationurl();
 		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-
+		//opens the registration sheet
 		Sheet registrationSheet = landingpageobj.loadExcelSheet("registrationdata");
 		Iterator<Row> iterator = registrationSheet.iterator();
+		//iterates over each row and columns in the sheet.
 		while (iterator.hasNext()) {
 			Row nextRow = iterator.next();
 			Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -62,6 +63,7 @@ public class registrationDataDriven {
 				Cell cell = cellIterator.next();
 				int columnIndex = cell.getColumnIndex();
 				switch (columnIndex) {
+				//conditional looping to access each coulmns in a row.
 				case 0:
 					clickRadioButtons = false;
 					driver.findElement(landingpageobj.signupfirstNameinput).sendKeys(Keys.chord(Keys.CONTROL, "a"),
@@ -72,7 +74,7 @@ public class registrationDataDriven {
 							cell.getStringCellValue());
 					break;
 				case 2:
-					cell.setCellType(Cell.CELL_TYPE_STRING);
+					cell.setCellType(Cell.CELL_TYPE_STRING); //set the cell type to STRING.
 					driver.findElement(landingpageobj.signupphoneNumberinput).sendKeys(Keys.chord(Keys.CONTROL, "a"),
 							cell.getStringCellValue());
 					break;
@@ -96,7 +98,7 @@ public class registrationDataDriven {
 				}
 				if (clickRadioButtons) {
 					// driver.findElement(landingpageobj.signupextinput).sendKeys("");
-
+					//clicks all the radio-buttons and check-boxes when required.
 					if (!driver.findElement(landingpageobj.signupnoThanksinput).isSelected()) {
 						driver.findElement(landingpageobj.signupnoThanksinput).click();
 					}
@@ -108,23 +110,32 @@ public class registrationDataDriven {
 					if (!driver.findElement(landingpageobj.signupcertifyinput).isSelected()) {
 						driver.findElement(landingpageobj.signupcertifyinput).click();
 					}
+					//Clicks the register button after filling form.
 					driver.findElement(landingpageobj.createUserbtn).click();
 				}
 			}
+			//Thread.sleep(5000);
+			//clicks error button when error is generated
 			if (driver.findElements(landingpageobj.accepterror).size() > 0) {
 				driver.findElement(landingpageobj.accepterror).click();
 			}
 
-			System.out.print(" - ");
+			System.out.print(" - "); //separator
+			if(driver.getCurrentUrl().toLowerCase().contains("dashboard")){
+				System.out.println("Registration successful");
+			}
 			try {
+				//checks if the registration was successful.
 				Assert.assertEquals("https://www.pizzahut.com/#/dashboard", driver.getCurrentUrl());
 				System.out.println("Registration successful");
 			} catch (AssertionError e) {
 				String errormsg = landingpageobj.getErrorMessage();
+				//prints the error message
 				System.out.println("Registration Error: " + errormsg);
 			}
 		}
 		System.out.println();
+		//closes the workbook and file
 		landingpageobj.closeWorkBook();
 		landingpageobj.closeFile();
 	}

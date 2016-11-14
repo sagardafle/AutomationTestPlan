@@ -94,7 +94,7 @@ public class HyperLinksTest {
 				System.out.println("Valid URL ==> " + url);
 				assertTrue(getHTTPResponseCode(url) < 400);
 			} else {
-				System.out.println("Broken URL ==>" + getHTTPResponseCode(url));
+				System.out.println("Broken URL ==>" +url+" Error code: "+ getHTTPResponseCode(url));
 				assertTrue(getHTTPResponseCode(url) >= 400);
 			}
 		}

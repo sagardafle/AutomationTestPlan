@@ -64,7 +64,6 @@ public class LandingPage {
 		inputStream = new FileInputStream(new File(excelFilePath));
 		workbook = new XSSFWorkbook(inputStream);
 		Sheet firstSheet = workbook.getSheet(sheetname);
-		System.out.println("FS " + firstSheet.getSheetName());
 		return firstSheet;
 	}
 
